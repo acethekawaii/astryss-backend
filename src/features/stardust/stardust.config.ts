@@ -1,6 +1,6 @@
 export const stardust = {
-  width: 1000,
-  height: 1000,
+  width: 192,
+  height: 108,
   palette: [
     '#FFFFFF',
     '#E4E4E4',
@@ -28,3 +28,7 @@ export const stardust = {
 } as const;
 
 export const boardByteLength = stardust.width * stardust.height;
+
+// Scopes the Redis keys and the placement log to one board size, so a resized
+// deploy starts a fresh board instead of failing on, or replaying into, the old one.
+export const boardId = `${stardust.width}x${stardust.height}`;

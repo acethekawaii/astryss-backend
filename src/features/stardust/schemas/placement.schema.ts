@@ -24,9 +24,12 @@ export class Placement {
 
   @Prop({ required: true, type: Date })
   at: Date;
+
+  @Prop({ required: true, type: String })
+  board: string;
 }
 
 export const PlacementSchema = SchemaFactory.createForClass(Placement);
-PlacementSchema.index({ at: 1, _id: 1 });
+PlacementSchema.index({ board: 1, at: 1, _id: 1 });
 
 export type PlacementDocument = HydratedDocument<Placement>;

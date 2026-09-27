@@ -12,7 +12,7 @@ import Redis from 'ioredis';
 import { Model } from 'mongoose';
 import { WebSocket } from 'ws';
 
-import { boardByteLength, stardust } from './stardust.config';
+import { boardByteLength, boardId, stardust } from './stardust.config';
 import {
   encodeDelta,
   encodeRecord,
@@ -36,9 +36,9 @@ import {
 export const STARDUST_REDIS_URL = 'STARDUST_REDIS_URL';
 export const STARDUST_SECRET = 'STARDUST_SECRET_TOKEN';
 
-const BOARD_KEY = 'stardust:board';
-const SEQ_KEY = 'stardust:seq';
-const CHANNEL = 'stardust:pixels';
+const BOARD_KEY = `stardust:${boardId}:board`;
+const SEQ_KEY = `stardust:${boardId}:seq`;
+const CHANNEL = `stardust:${boardId}:pixels`;
 
 @Injectable()
 export class Canvas implements OnModuleInit, OnModuleDestroy {
@@ -240,6 +240,7 @@ export class Canvas implements OnModuleInit, OnModuleDestroy {
         color,
         anonId,
         at,
+        board: boardId,
       });
     } catch (err) {
       await this.redis.del(idKey);
@@ -316,7 +317,7 @@ export class Canvas implements OnModuleInit, OnModuleDestroy {
   private async startup(): Promise<void> {
     const len = await this.redis.strlen(BOARD_KEY);
     const log = await this.placements
-      .find()
+      .find({ board: boardId })
       .sort({ at: 1, _id: 1 })
       .lean()
       .exec();

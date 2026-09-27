@@ -10,6 +10,7 @@ export type StoredPlacement = {
   color: ColorIndex;
   anonId: AnonId;
   at: Date;
+  board: string;
 };
 
 export type LivePixel = {

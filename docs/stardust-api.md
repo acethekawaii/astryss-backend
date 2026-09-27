@@ -49,7 +49,9 @@ Body is a `STBD` snapshot. Layout:
 
 Header length is `14 + paletteLength * 3`.
 
-Example: width 1000, height 1000, palette length 16, header length 62, body length `62 + 1000000`.
+Example: width 192, height 108, palette length 16, header length 62, body length `62 + 20736`.
+
+Clients should read the size from the header rather than hard-code it. Changing the size in `stardust.config.ts` starts a fresh board; earlier boards keep their own Redis keys and placement log.
 
 ## Pixels
 
