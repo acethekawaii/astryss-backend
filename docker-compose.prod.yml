@@ -1,0 +1,6 @@
+services:
+  api:
+    image: ghcr.io/acethekawaii/astryss-backend:latest
+    container_name: astryss-api
+    restart: unless-stopped
+    env_file: .env

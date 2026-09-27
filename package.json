@@ -29,10 +29,12 @@
     "class-validator": "^0.14.3",
     "cloudinary": "^2.8.0",
     "dotenv": "^17.2.3",
+    "ioredis": "^6.0.0",
     "mongoose": "^8.20.2",
     "multer": "^2.0.2",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.2"
+    "rxjs": "^7.8.2",
+    "ws": "^8.22.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
@@ -45,12 +47,15 @@
     "@types/multer": "^2.0.0",
     "@types/node": "^22.19.2",
     "@types/supertest": "^6.0.2",
+    "@types/ws": "^8.18.1",
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.2",
     "globals": "^16.0.0",
     "jest": "^30.0.0",
+    "mongodb-memory-server": "^11.3.0",
     "prettier": "^3.4.2",
+    "redis-memory-server": "^0.17.1",
     "source-map-support": "^0.5.21",
     "supertest": "^7.0.0",
     "ts-jest": "^29.2.5",
@@ -75,6 +80,16 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "setupFiles": [
+      "<rootDir>/features/stardust/jest-env.ts"
+    ],
+    "moduleNameMapper": {
+      "^src/(.*)$": "<rootDir>/$1"
+    }
+  },
+  "allowScripts": {
+    "mongodb-memory-server@11.3.0": true,
+    "redis-memory-server@0.17.1": true
   }
 }
