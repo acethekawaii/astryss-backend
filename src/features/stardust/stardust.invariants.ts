@@ -12,7 +12,7 @@ import {
   LivePixel,
   StoredPlacement,
   UnhashedIp,
-} from './stardust.types';
+} from './types/stardust.types';
 
 function asAnonId(value: string): AnonId {
   return value as AnonId;

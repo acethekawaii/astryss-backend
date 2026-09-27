@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 
-import type { AnonId, ColorIndex } from '../stardust.types';
+import type { AnonId, ColorIndex } from '../types/stardust.types';
 
 @Schema({
   collection: 'stardust_placements',

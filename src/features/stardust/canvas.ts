@@ -31,7 +31,7 @@ import {
   IpHash,
   LivePixel,
   UnhashedIp,
-} from './stardust.types';
+} from './types/stardust.types';
 
 export const STARDUST_REDIS_URL = 'STARDUST_REDIS_URL';
 export const STARDUST_SECRET = 'STARDUST_SECRET_TOKEN';

@@ -81,9 +81,6 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node",
-    "setupFiles": [
-      "<rootDir>/features/stardust/jest-env.ts"
-    ],
     "moduleNameMapper": {
       "^src/(.*)$": "<rootDir>/$1"
     }
