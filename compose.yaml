@@ -4,3 +4,14 @@ services:
     container_name: astryss-api
     restart: unless-stopped
     env_file: .env
+    expose:
+      - "8000"
+    networks:
+      proxy:
+        aliases:
+          - astryss-api
+
+networks:
+  proxy:
+    external: true
+    name: proxy

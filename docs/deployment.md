@@ -28,7 +28,7 @@ In Termius:
 
 ```bash
 cd ~/docker-apps/astryss-api
-nano compose.yaml   # paste docker-compose.prod.yml from this repo
+nano compose.yaml   # paste compose.yaml from this repo
 nano .env           # paste .env from this repo
 chmod 600 .env
 ```
