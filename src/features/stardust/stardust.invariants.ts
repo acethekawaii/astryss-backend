@@ -191,7 +191,7 @@ export function paintAll(
   }
 }
 
-function parseHexRgb(hex: string): [number, number, number] {
+export function parseHexRgb(hex: string): [number, number, number] {
   const raw = hex.startsWith('#') ? hex.slice(1) : hex;
   return [
     parseInt(raw.slice(0, 2), 16),

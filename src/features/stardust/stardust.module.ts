@@ -5,6 +5,7 @@ import { Canvas, STARDUST_REDIS_URL, STARDUST_SECRET } from './canvas';
 import { LiveGateway } from './live.gateway';
 import { Placement, PlacementSchema } from './schemas/placement.schema';
 import { StardustController } from './stardust.controller';
+import { Tally } from './tally';
 
 export type StardustModuleOptions = {
   redisUrl: string;
@@ -33,6 +34,7 @@ export class StardustModule {
         { provide: STARDUST_SECRET, useValue: options.secret },
         Canvas,
         LiveGateway,
+        Tally,
       ],
       exports: [Canvas],
     };

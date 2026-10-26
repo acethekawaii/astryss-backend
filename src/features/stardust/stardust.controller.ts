@@ -17,11 +17,13 @@ import { ResponseInterceptor } from 'src/common/interceptors/response.intercepto
 
 import { assertBearer, Canvas, STARDUST_SECRET } from './canvas';
 import { clientAddress, mintToken, parsePlaceBody } from './stardust.invariants';
+import { Tally } from './tally';
 
 @Controller('stardust')
 export class StardustController {
   constructor(
     private readonly canvas: Canvas,
+    private readonly tally: Tally,
     @Inject(STARDUST_SECRET) private readonly secret: string,
   ) {}
 
@@ -38,6 +40,11 @@ export class StardustController {
     res.setHeader('Content-Type', 'application/octet-stream');
     res.setHeader('Cache-Control', 'no-store');
     res.status(HttpStatus.OK).send(body);
+  }
+
+  @Get('stats')
+  async getStats(): Promise<{ totalPixels: number }> {
+    return { totalPixels: await this.tally.totalPixels() };
   }
 
   @Post('pixels')

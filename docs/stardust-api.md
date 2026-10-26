@@ -102,6 +102,18 @@ Cooldown `429`:
 
 Other statuses: `400` bad cell or color, `401` missing or bad token, `503` board not ready or board write failed after the log append.
 
+## Stats
+
+`GET /api/v2/stardust/stats`
+
+No token. Response `200`, without the `statusCode`/`data` envelope:
+
+```json
+{ "totalPixels": 1334 }
+```
+
+`totalPixels` counts every placement in the log, on every board size, including pixels later painted over. The server reuses one count for 30 seconds, so the number can trail the log by up to that long, and polling faster returns the same value.
+
 ## Live WebSocket
 
 URL: `ws://<host>/api/v2/stardust/live` (or `wss` behind TLS).
@@ -145,3 +157,34 @@ Each record is 9 bytes: seq u32be, x u16be, y u16be, color u8.
 | 13 | `#0000EA` |
 | 14 | `#CF6EE4` |
 | 15 | `#820080` |
+
+## Timelapse render
+
+`npm run stardust:timelapse` replays the placement log into video for the homepage and social posts. It reads `stardust_placements` from `MONGO_URI` in `.env` without writing to it, and needs `ffmpeg` with libx264 and libvpx-vp9 on `PATH`.
+
+```bash
+npm run stardust:timelapse
+npm run stardust:timelapse -- --out ../astryss-frontend/public/assets/stardust
+```
+
+Files land in `out/stardust/`, which git ignores, unless `--out` names another directory. Each run overwrites them.
+
+| File | Contents |
+| --- | --- |
+| `stardust-loop.webm` | VP9, 10 s, no audio: 8.5 s of placements from a blank board, then 1.5 s on the current canvas. The homepage loop. |
+| `stardust-loop.mp4` | The same loop in H.264, for browsers without WebM. |
+| `stardust-timelapse.mp4` | H.264, 25 s, no audio: 23 s of placements, then 2 s on the final canvas. For X and Facebook. |
+| `stardust-poster.png` | The current canvas, the same as the videos' last frame. |
+
+Placements replay in `at` order onto a white board (index 0), spread evenly by count rather than by time, so quiet days don't become dead air. The board size comes from the placements' `board` field. Each board pixel becomes a square block, scaled nearest-neighbor by the even factor that lands closest to 1920 px wide: 10 for 192×108, giving 1920×1080. If the log spans more than one board size, the script renders the board of the newest placement and says how many placements it skipped.
+
+Homepage markup, with the files in the frontend's `public/assets/stardust/`:
+
+```html
+<video autoplay muted loop playsinline poster="/assets/stardust/stardust-poster.png">
+  <source src="/assets/stardust/stardust-loop.webm" type="video/webm" />
+  <source src="/assets/stardust/stardust-loop.mp4" type="video/mp4" />
+</video>
+```
+
+Browsers smooth video they resize. `image-rendering: pixelated` keeps the blocks hard-edged where it is supported.

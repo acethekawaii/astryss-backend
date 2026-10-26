@@ -25,6 +25,7 @@ export const stardust = {
   ipWindowMs: 60000,
   flushMs: 150,
   trustedProxyHops: 1,
+  tallyTtlMs: 30000,
 } as const;
 
 export const boardByteLength = stardust.width * stardust.height;
