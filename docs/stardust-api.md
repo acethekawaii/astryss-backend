@@ -49,9 +49,11 @@ Body is a `STBD` snapshot. Layout:
 
 Header length is `14 + paletteLength * 3`.
 
-Example: width 192, height 108, palette length 16, header length 62, body length `62 + 20736`.
+Example: width 192, height 108, palette length 24, header length `14 + 24 * 3 = 86`, body length `86 + 20736`.
 
 Clients should read the size from the header rather than hard-code it. Changing the size in `stardust.config.ts` starts a fresh board; earlier boards keep their own Redis keys and placement log.
+
+Palette indexes are append-only: existing indexes are never reordered, removed, or assigned a different color. The picker display order is separate from storage order and is provided by the stats endpoint. Expanding the palette does not change the protocol version or require a data migration.
 
 ## Pixels
 
@@ -109,10 +111,18 @@ Other statuses: `400` bad cell or color, `401` missing or bad token, `503` board
 No token. Response `200`, without the `statusCode`/`data` envelope:
 
 ```json
-{ "totalPixels": 1334 }
+{
+  "totalPixels": 1334,
+  "paletteDisplayOrder": [
+    0, 16, 1, 2, 3, 18, 4, 21, 5, 20, 22, 8, 23, 6, 7, 9, 10, 17, 11, 12, 13,
+    19, 14, 15
+  ]
+}
 ```
 
 `totalPixels` counts every placement in the log, on every board size, including pixels later painted over. The server reuses one count for 30 seconds, so the number can trail the log by up to that long, and polling faster returns the same value.
+
+`paletteDisplayOrder` contains each palette index once, grouped for picker display. It does not change the indexes stored in snapshots, live frames, Redis, or the placement log.
 
 ## Live WebSocket
 
@@ -139,24 +149,32 @@ Each record is 9 bytes: seq u32be, x u16be, y u16be, color u8.
 
 ## Palette
 
-| Index | Hex |
-| --- | --- |
-| 0 | `#FFFFFF` |
-| 1 | `#E4E4E4` |
-| 2 | `#888888` |
-| 3 | `#222222` |
-| 4 | `#FFA7D1` |
-| 5 | `#E50000` |
-| 6 | `#E59500` |
-| 7 | `#A06A42` |
-| 8 | `#E5D900` |
-| 9 | `#94E044` |
-| 10 | `#02BE01` |
-| 11 | `#00D3DD` |
-| 12 | `#0083C7` |
-| 13 | `#0000EA` |
-| 14 | `#CF6EE4` |
-| 15 | `#820080` |
+| Index | Hex       | Name            |
+| ----- | --------- | --------------- |
+| 0     | `#FFFFFF` | White           |
+| 1     | `#E4E4E4` | Light gray      |
+| 2     | `#888888` | Gray            |
+| 3     | `#222222` | Black           |
+| 4     | `#FFA7D1` | Pink            |
+| 5     | `#E50000` | Red             |
+| 6     | `#E59500` | Orange          |
+| 7     | `#A06A42` | Brown           |
+| 8     | `#E5D900` | Yellow          |
+| 9     | `#94E044` | Lime            |
+| 10    | `#02BE01` | Green           |
+| 11    | `#00D3DD` | Cyan            |
+| 12    | `#0083C7` | Blue            |
+| 13    | `#0000EA` | Indigo          |
+| 14    | `#CF6EE4` | Lavender        |
+| 15    | `#820080` | Purple          |
+| 16    | `#FFF9EC` | Floral White    |
+| 17    | `#D7F6FD` | Ice Blue        |
+| 18    | `#FFEBF5` | Lavender Blush  |
+| 19    | `#A8A9DB` | Periwinkle Blue |
+| 20    | `#880015` | Dark Red        |
+| 21    | `#FF94AC` | Rose            |
+| 22    | `#FAFFA3` | Light Yellow    |
+| 23    | `#FFC90E` | Gold            |
 
 ## Timelapse render
 

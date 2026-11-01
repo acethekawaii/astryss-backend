@@ -16,7 +16,12 @@ import type { Request, Response } from 'express';
 import { ResponseInterceptor } from 'src/common/interceptors/response.interceptor';
 
 import { assertBearer, Canvas, STARDUST_SECRET } from './canvas';
-import { clientAddress, mintToken, parsePlaceBody } from './stardust.invariants';
+import { stardust } from './stardust.config';
+import {
+  clientAddress,
+  mintToken,
+  parsePlaceBody,
+} from './stardust.invariants';
 import { Tally } from './tally';
 
 @Controller('stardust')
@@ -43,8 +48,14 @@ export class StardustController {
   }
 
   @Get('stats')
-  async getStats(): Promise<{ totalPixels: number }> {
-    return { totalPixels: await this.tally.totalPixels() };
+  async getStats(): Promise<{
+    totalPixels: number;
+    paletteDisplayOrder: readonly number[];
+  }> {
+    return {
+      totalPixels: await this.tally.totalPixels(),
+      paletteDisplayOrder: stardust.paletteDisplayOrder,
+    };
   }
 
   @Post('pixels')
