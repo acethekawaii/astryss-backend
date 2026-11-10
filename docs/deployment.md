@@ -33,10 +33,6 @@ nano .env           # paste .env from this repo
 chmod 600 .env
 ```
 
-Set `REDIS_URL` to the connection string from Redis Cloud → Databases → Astryss → **Connect**.
-If the database has a source-IP allowlist under **Security**, add the VPS IP. `MONGO_URI` stays
-the existing Atlas connection string. Leave Cloudinary blank only if that feature is disabled.
-
 ## 4. Log in to GHCR
 
 For a private package, use a GitHub token with `read:packages`:

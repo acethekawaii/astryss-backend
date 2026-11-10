@@ -36,6 +36,9 @@ async function bootstrap() {
   if (!process.env.STARDUST_SECRET) {
     throw new Error('STARDUST_SECRET is required');
   }
+  if (!process.env.SITE_STATS_SECRET) {
+    throw new Error('SITE_STATS_SECRET is required');
+  }
   if (!process.env.CORS_ALLOWED_ORIGINS) {
     throw new Error('CORS_ALLOWED_ORIGINS is required');
   }

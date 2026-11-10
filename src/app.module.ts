@@ -6,6 +6,7 @@ import * as dotenv from 'dotenv';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { EntriesModule } from './features/entries/entries.module';
+import { SiteStatsModule } from './features/site-stats/site-stats.module';
 import { StardustModule } from './features/stardust/stardust.module';
 
 dotenv.config();
@@ -20,6 +21,9 @@ dotenv.config();
     StardustModule.forRoot({
       redisUrl: process.env.REDIS_URL!,
       secret: process.env.STARDUST_SECRET!,
+    }),
+    SiteStatsModule.forRoot({
+      secret: process.env.SITE_STATS_SECRET!,
     }),
   ],
   controllers: [AppController],
